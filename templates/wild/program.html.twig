@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container">
+    <div class="card">
+        <div class="card-header">
+            <img style="max-width: 250px;" class="image-fluid" src="{{ program.poster }}"/>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title">{{ program.title }}</h5>
+            <p class="card-text">{{ program.summary }}</p>
+            <a href="{{ path('show_season', {id: program.id}) }}" class="btn btn-primary">Show Seasons</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

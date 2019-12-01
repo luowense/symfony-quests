@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">{{ actor.name }}</h5>
+                <ul>
+                    {% for movie in movies %}
+                        <div class="card-text">
+                            <li><a href="{{ path('program_show', {slug:movie.title}) }}">{{ movie.title }}</a></li>
+                        </div>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}

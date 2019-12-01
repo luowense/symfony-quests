@@ -1,0 +1,20 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        {% for season in seasons %}
+            <div class="card">
+                <div class="card-header">
+                    <h3><strong>{{ season.program.title }}</strong></h3>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ season.year }}</h5>
+                    <p class="card-text">{{ season.description }}</p>
+                    <a href="{{ path('allepisodes_show', {id:season.id}) }}" class="btn btn-primary">Show Episodes</a>
+                    <a href="{{ path('season_edit', {id:season.id}) }}" class="btn btn-primary">Edit Season</a>
+                    <a href="{{ path('season_delete', {id:season.id}) }}" class="btn btn-primary">Delete Season</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}

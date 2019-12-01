@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ dump() }}
+
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <img class="image-fluid" src="{{ program.poster }}"/>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ program.title }}</h5>
+                <p class="card-text">{{ program.summary }}</p>
+                <div class="card-text">
+                    <ul>
+                        <h5><strong>Actors</strong></h5>
+                        {% for actor in actors %}
+                            <li><a href="{{ path('show_actor', {name:actor.name}) }}">{{ actor.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <a href="{{ path('show_season', {id:program.id}) }}" class="btn btn-primary">Show Seasons</a>
+                <a href="{{ path('program_edit', {id: program.id}) }}" class="btn btn-primary">Edit Program</a>
+                <a href="{{ path('program_delete', {id: program.id}) }}" class="btn btn-primary">Delete Program</a>
+
+            </div>
+        </div>
+    </div>
+{% endblock %}

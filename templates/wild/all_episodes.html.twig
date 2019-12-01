@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {% for episode in episodes %}
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ episode.title }}</h5>
+                    <p class="card-text">{{ episode.synopsis }}</p>
+                    <a href="{{ path('episode_show', {id:episode.id}) }}" class="btn btn-primary">Show Episode</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}

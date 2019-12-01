@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">{{ episode.title }}</h5>
+                <p class="card-text">{{ episode.synopsis }}</p>
+                <a href="{{ path('episode_show', {id:episode.id}) }}" class="btn btn-primary">Show</a>
+                <a href="{{ path('episode_edit', {id:episode.id}) }}" class="btn btn-primary">Edit Episode</a>
+                <a href="{{ path('episode_delete', {id:episode.id}) }}" class="btn btn-primary">Delete Episode</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}

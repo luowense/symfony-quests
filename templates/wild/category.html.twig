@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+
+    {% for program in programs %}
+        <div class="container">
+            <div class="card">
+                <div class="card-header">
+                    <img style="max-width: 250px;" class="image-fluid" src="{{ program.poster }}"/>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ program.title }}</h5>
+                    <p class="card-text">{{ program.summary }}</p>
+                    <a href="{{ path('default') }}" class="btn btn-primary">Return Homepage</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
