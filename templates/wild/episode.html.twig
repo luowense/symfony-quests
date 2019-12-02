@@ -6,6 +6,7 @@
             <div class="card-header">
             </div>
             <div class="card-body">
+                <h5 class="card-title">{{ program.title }}</h5>
                 <h5 class="card-title">{{ episode.title }}</h5>
                 <p class="card-text">{{ episode.synopsis }}</p>
                 <a href="{{ path('episode_show', {id:episode.id}) }}" class="btn btn-primary">Show</a>

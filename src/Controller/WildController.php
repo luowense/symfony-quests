@@ -168,16 +168,14 @@ class WildController extends AbstractController
 
     /**
      * @Route("episode/{id}", name="episode_show")
-     * @ParamConverter("episode", class="App\Entity\EpisodeFixtures")
-     * @param $id
-     * @param $episode
-     * @return \Symfony\Component\HttpFoundation\Response
      */
-    public function showEpisode($id, $episode)
+    public function showEpisode($id, Episode $episode)
     {
-
+        $season = $episode->getSeason();
+        $program = $season->getProgram();
         return $this->render('Wild/episode.html.twig', [
             'episode' => $episode,
+            'program' => $program,
         ]);
     }
 
