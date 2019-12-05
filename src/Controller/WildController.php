@@ -7,8 +7,10 @@ use App\Entity\Program;
 use App\Entity\Season;
 use App\Entity\Episode;
 use App\Entity\Actor;
+use App\Service\Slugify;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 class WildController extends AbstractController
@@ -39,13 +41,16 @@ class WildController extends AbstractController
             throw $this
                 ->createNotFoundException('No slug gas been sent to fin a program in program\'s table.');
         }
+
         $slug = preg_replace(
             '/-/',
             ' ', ucwords(trim(strip_tags($slug)), '-')
         );
+
         $program = $this->getDoctrine()
             ->getRepository(Program::class)
             ->findOneBy(['title' => mb_strtolower($slug)]);
+
 
         $seasons = $this->getDoctrine()
             ->getRepository(Season::class)
@@ -60,7 +65,6 @@ class WildController extends AbstractController
         }
         return $this->render('Wild/show.html.twig', [
             'program' => $program,
-            'slug' => $slug,
             'seasons' => $seasons,
             'actors' => $actors
         ]);
@@ -69,7 +73,7 @@ class WildController extends AbstractController
     /**
      * @Route("/category/{category}", name="show_category")
      * @param $category
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
     public function showByCategory($category)
     {
@@ -123,21 +127,17 @@ class WildController extends AbstractController
     }
 
     /**
-     * @Route("season/{id}", name="show_season")
-     * @param $id
-     * @return \Symfony\Component\HttpFoundation\Response
+     * @Route("season/{slug}", name="show_season")
+     * @return Response
      */
-    public function showBySeason($id)
+    public function showBySeason(Season $season)
     {
+
         $seasonRepository = $this->getDoctrine()
             ->getManager()
             ->getRepository(Season::class);
 
-        $finalSeason = $seasonRepository->findBy(['program' => $id]);
-
-        $episodeRepository = $this->getDoctrine()
-            ->getManager()
-            ->getRepository(Episode::class);
+        $finalSeason = $seasonRepository->findBy(['program' => $season->getProgram()]);
 
         if (!empty($finalSeason))
         {
@@ -153,6 +153,7 @@ class WildController extends AbstractController
 
     /**
      * @Route("episodes/{id}", name="allepisodes_show")
+     * @return Response
      */
     public function showAllEpisodes($id)
     {
@@ -167,9 +168,11 @@ class WildController extends AbstractController
     }
 
     /**
-     * @Route("episode/{id}", name="episode_show")
+     * @Route("episode/{slug}", name="episode_show")
+     * @param Episode $episode
+     * @return Response
      */
-    public function showEpisode($id, Episode $episode)
+    public function showEpisode(Episode $episode)
     {
         $season = $episode->getSeason();
         $program = $season->getProgram();
@@ -180,14 +183,16 @@ class WildController extends AbstractController
     }
 
     /**
-     * @Route("actor/{name}", name="show_actor")
+     * @Route("actor/{slug}", name="show_actor")
+     * @param Actor $actor
+     * @return Response
      */
-    public function showActor($name)
+    public function showActor(Actor $actor)
     {
         $actorRepository = $this->getDoctrine()
             ->getManager()
             ->getRepository(Actor::class)
-            ->findOneBy(['name' => $name]);
+            ->findOneBy(['name' => $actor->getName()]);
 
         $movies = $actorRepository->getPrograms();
 

@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Form\CategoryType;
+use App\Service\Slugify;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -14,7 +15,7 @@ class CategoryController extends AbstractController
      * @Route("form", name="wild_form")
      */
 
-    public function renderForm(Request $request)
+    public function renderForm(Request $request, Slugify $slugify)
     {
         $form = $this->createForm(
 
@@ -40,7 +41,8 @@ class CategoryController extends AbstractController
                 ->getManager();
 
             $category = new Category();
-
+            $slugUrl = $slugify->generate($category->getName());
+            $category->setSlug($slugUrl);
             $em->persist($category->setName($data->getName()));
             $em->flush();
             $this->redirectToRoute('default');

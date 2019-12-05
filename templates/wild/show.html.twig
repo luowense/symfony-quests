@@ -1,8 +1,6 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    {{ dump() }}
-
     <div class="container">
         <div class="card">
             <div class="card-header">
@@ -15,13 +13,13 @@
                     <ul>
                         <h5><strong>Actors</strong></h5>
                         {% for actor in actors %}
-                            <li><a href="{{ path('show_actor', {name:actor.name}) }}">{{ actor.name }}</a></li>
+                            <li><a href="{{ path('show_actor', {slug:actor.slug}) }}">{{ actor.name }}</a></li>
                         {% endfor %}
                     </ul>
                 </div>
-                <a href="{{ path('show_season', {id:program.id}) }}" class="btn btn-primary">Show Seasons</a>
-                <a href="{{ path('program_edit', {id: program.id}) }}" class="btn btn-primary">Edit Program</a>
-                <a href="{{ path('program_delete', {id: program.id}) }}" class="btn btn-primary">Delete Program</a>
+                <a href="{{ path('show_season', {slug:seasons.slug}) }}" class="btn btn-primary">Show Seasons</a>
+                <a href="{{ path('program_edit', {slug: program.slug}) }}" class="btn btn-primary">Edit Program</a>
+                <a href="{{ path('program_delete', {slug: program.slug}) }}" class="btn btn-primary">Delete Program</a>
 
             </div>
         </div>

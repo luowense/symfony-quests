@@ -11,8 +11,8 @@
                     <h5 class="card-title">{{ season.year }}</h5>
                     <p class="card-text">{{ season.description }}</p>
                     <a href="{{ path('allepisodes_show', {id:season.id}) }}" class="btn btn-primary">Show Episodes</a>
-                    <a href="{{ path('season_edit', {id:season.id}) }}" class="btn btn-primary">Edit Season</a>
-                    <a href="{{ path('season_delete', {id:season.id}) }}" class="btn btn-primary">Delete Season</a>
+                    <a href="{{ path('season_edit', {slug:season.slug}) }}" class="btn btn-primary">Edit Season</a>
+                    <a href="{{ path('season_delete', {slug:season.slug}) }}" class="btn btn-primary">Delete Season</a>
                 </div>
             </div>
         {% endfor %}
