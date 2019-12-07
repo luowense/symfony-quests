@@ -9,8 +9,8 @@
         <div class="card-body">
             <h5 class="card-title">{{ program.title }}</h5>
             <p class="card-text">{{ program.summary }}</p>
-            <a href="{{ path('show_season', {id: program.id}) }}" class="btn btn-primary">Show Seasons</a>
+            <a href="{{ path('show_season', {slug: program.slug}) }}" class="btn btn-primary">Show Seasons</a>
         </div>
     </div>
 </div>
-{% endblock %}
+{% endblock %}g

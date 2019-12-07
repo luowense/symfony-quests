@@ -9,6 +9,12 @@ use App\Service\Slugify;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mailer\Bridge\Google\Transport\GmailSmtpTransport;
+use Symfony\Component\Mailer\Mailer;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
+use Symfony\Component\Mime\Email;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
@@ -28,8 +34,13 @@ class ProgramController extends AbstractController
 
     /**
      * @Route("/new", name="program_new", methods={"GET","POST"})
+     * @param Request $request
+     * @param Slugify $slugify
+     * @param MailerInterface $mailer
+     * @return Response
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
      */
-    public function new(Request $request, Slugify $slugify): Response
+    public function new(Request $request, Slugify $slugify, MailerInterface $mailer): Response
     {
         $program = new Program();
         $form = $this->createForm(ProgramType::class, $program);
@@ -41,6 +52,18 @@ class ProgramController extends AbstractController
             $program->setSlug($slugUrl);
             $entityManager->persist($program);
             $entityManager->flush();
+
+            $email = (new TemplatedEmail())
+                ->from('laurent.develop38@gmail.com')
+                ->to('laurent.develop38@gmail.com')
+                ->subject('test')
+                ->htmlTemplate('emails/new_program.html.twig')
+                ->context([
+                    'program' => $program
+                ]);
+
+            $mailer->send($email);
+
 
             return $this->redirectToRoute('program_index');
         }
