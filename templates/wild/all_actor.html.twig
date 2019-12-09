@@ -7,7 +7,7 @@
         <div class="card" style="width: 18rem;">
             <div class="card-body">
                 <h5 class="card-title">{{ actor.name }}</h5>
-                <a href="{{ path('show_actor', {name:actor.name}) }}" class="card-link">Show Programs</a>
+                <a href="{{ path('show_actor', {slug:actor.name}) }}" class="card-link">Show Programs</a>
             </div>
         </div>
         {% endfor %}

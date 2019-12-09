@@ -18,8 +18,10 @@
                     </ul>
                 </div>
                 <a href="{{ path('show_season', {slug:seasons.slug}) }}" class="btn btn-primary">Show Seasons</a>
+                {% if is_granted("ROLE_ADMIN") %}
                 <a href="{{ path('program_edit', {slug: program.slug}) }}" class="btn btn-primary">Edit Program</a>
                 <a href="{{ path('program_delete', {slug: program.slug}) }}" class="btn btn-primary">Delete Program</a>
+                {% endif %}
 
             </div>
         </div>

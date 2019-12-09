@@ -1,7 +1,7 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
-    <div class="container">
+    <br class="container">
         <div class="card">
             <div class="card-header">
             </div>
@@ -14,5 +14,25 @@
                 <a href="{{ path('episode_delete', {slug:episode.slug}) }}" class="btn btn-primary">Delete Episode</a>
             </div>
         </div>
+          {% if app.user %}
+            {{ include('episode/_form.html.twig') }}
+        {% endif %}
+        {% if comments is defined %}
+            <h3>Comments Section:</h3>
+            {% for comment in comments | sort | reverse %}
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Your Rating: {{ comment.rating }}</h5>
+                        <p class="card-text">Name: {{ comment.authorName }}</p>
+                        <p class="card-text">{{ comment.content }}</p>
+                        <p class="card-text"><small class="text-muted">{{ comment.date|date('Y-m-d h:m:s') }}</small></p>
+                    </div>
+                    <form method="post" action="{{ path('delete_comment', {'id': comment.id}) }}" onsubmit="return confirm('Are you sure you want to delete this item?');">
+                        <input type="hidden" name="_method" value="DELETE">
+                        <button class="btn">Delete</button>
+                    </form>
+                </div>
+            {% endfor %}
+        {% endif %}
     </div>
 {% endblock %}

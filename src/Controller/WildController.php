@@ -3,13 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\Category;
+use App\Entity\Comment;
 use App\Entity\Program;
 use App\Entity\Season;
 use App\Entity\Episode;
 use App\Entity\Actor;
+use App\Entity\User;
+use App\Form\CommentType;
 use App\Service\Slugify;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Security;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -170,15 +176,76 @@ class WildController extends AbstractController
     /**
      * @Route("episode/{slug}", name="episode_show")
      * @param Episode $episode
+     * @param Request $request
+     * @param UserInterface $user
      * @return Response
+     * @throws \Exception
      */
-    public function showEpisode(Episode $episode)
+    public function showEpisode(Episode $episode, Request $request, ?UserInterface $user)
     {
         $season = $episode->getSeason();
         $program = $season->getProgram();
+
+        if(empty($user)) {
+            return $this->render('Wild/episode.html.twig', [
+                'episode' => $episode,
+                'program' => $program,
+                ]);
+        }
+
+        $username = $user->getUsername();
+
+
+        $comment = new Comment();
+        $comment->setAuthorName($username);
+        $comment->setDate(new \DateTime('now'));
+        $comment->setEpisode($episode);
+
+        $form = $this->createForm(CommentType::class, $comment);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment = $form->getData();
+            $em = $this->getDoctrine()->getManager();
+            $em->persist($comment);
+            $em->flush();
+
+            return $this->redirectToRoute('episode_show', [
+                'slug' => $episode->getSlug()
+            ] );
+        }
+
+        $comments = $this->getDoctrine()
+            ->getManager()
+            ->getRepository(Comment::class)
+            ->findBy(['episode' => $episode->getId()]);
+
         return $this->render('Wild/episode.html.twig', [
             'episode' => $episode,
             'program' => $program,
+            'form' => $form->createView(),
+            'comments'=> $comments,
+        ]);
+    }
+
+    /**
+     * @Route("delete/{id}", name="delete_comment")
+     * @param Comment $comment
+     * @param UserInterface $user
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function deleteComment(Comment $comment, UserInterface $user)
+    {
+        if ($comment->getAuthorName() == $user->getEmail()) {
+            $em = $this->getDoctrine()->getManager();
+            $em->remove($comment);
+            $em->flush();
+        }
+
+        $slug = $comment->getEpisode()->getSlug();
+
+        return $this->redirectToRoute('episode_show', [
+            'slug' => $slug
         ]);
     }
 
@@ -215,6 +282,14 @@ class WildController extends AbstractController
         return $this->render('wild/all_actor.html.twig', [
             'actors' => $actorsRepository
         ]);
+    }
+
+    /**
+     * @Route("my-account/", name="my_account")
+     */
+    public function myAccount()
+    {
+        return $this->render('user-section/user_section.html.twig');
     }
 }
 

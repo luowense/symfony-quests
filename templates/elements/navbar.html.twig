@@ -1,16 +1,24 @@
 <nav class="navbar navbar-expand-lg navbar-primary bg-light">
     <a class="navbar-brand" href="{{ path('default') }}">Wild Series</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+            aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+
         <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="{{ path('default') }}">Home <span class="sr-only">(current)</span></a>
-        </div>
-        <div class="navbar-nav">
-            <a class="nav-item nav-link active" href="{{ path('show_category', {category:'Horreur'}) }}">Horror<span class="sr-only">(current)</span></a>
+            <a class="nav-item nav-link active" href="{{ path('show_category', {category:'Horreur'}) }}">Horror<span
+                        class="sr-only">(current)</span></a>
             <a class="nav-item nav-link active" href="{{ path('wild_form') }}">Add One Category<span class="sr-only">(current)</span></a>
             <a class="nav-item nav-link active" href="{{ path('show_all_actors') }}">Actors<span class="sr-only">(current)</span></a>
+            {% if app.user is null %}
+                <a class="nav-item nav-link active" href="{{ path('app_login') }}">Login</a>
+                <a class="nav-item nav-link active" href="{{ path('app_register') }}">Sign Up</a>
+            {% endif %}
+            {% if app.user is not null %}
+                <a class="nav-item nav-link active" href="{{ path('my_account') }}">My Account</a>
+                <a class="nav-item nav-link active" href="{{ path('app_logout') }}">Logout</a>
+            {% endif %}
         </div>
     </div>
 </nav>

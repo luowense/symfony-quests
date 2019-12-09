@@ -5,9 +5,13 @@ namespace App\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Mapping\ClassMetadata;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\ProgramRepository")
+ * @UniqueEntity("title")
  */
 class Program
 {
@@ -20,16 +24,24 @@ class Program
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\category", inversedBy="programs")
+     * @Assert\NotBlank()
      */
     private $category;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     * @Assert\Length(max="255")
      */
     private $title;
 
     /**
      * @ORM\Column(type="text")
+     * @Assert\Regex(
+                pattern="/(plus belle la vie)/",
+     *          match=false,
+     *          message="Here we just accept real series, so sorry guy")
+     *
      */
     private $summary;
 
