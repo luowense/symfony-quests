@@ -44,6 +44,8 @@ class SeasonController extends AbstractController
             $entityManager->persist($season);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Your new season has been created');
+
             return $this->redirectToRoute('season_index');
         }
 

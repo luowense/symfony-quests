@@ -55,6 +55,8 @@ class ProgramController extends AbstractController
             $entityManager->persist($program);
             $entityManager->flush();
 
+            $this->addFlash('success', 'Your new program has been created');
+
             $email = (new TemplatedEmail())
                 ->from('laurent.develop38@gmail.com')
                 ->to('laurent.develop38@gmail.com')
